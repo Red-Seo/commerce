@@ -5,6 +5,7 @@ import Cart from 'components/cart';
 import CartIcon from 'components/icons/cart';
 import { getMenu } from 'lib/shopify';
 import { Menu } from 'lib/shopify/types';
+import Search from './search';
 
 export default async function Navbar() {
   const menu = await getMenu('next-js-frontend-header-menu');
@@ -49,12 +50,9 @@ export default async function Navbar() {
 
           <div className="flex items-center gap-4">
             <div className="sm:flex sm:gap-4">
-              <a
-                className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
-                href="/"
-              >
-                Login
-              </a>
+              <Suspense fallback={<CartIcon className="h-6" />}>
+                <Search />
+              </Suspense>
 
               <div className="hidden sm:flex">
                 <Suspense fallback={<CartIcon className="h-6" />}>
