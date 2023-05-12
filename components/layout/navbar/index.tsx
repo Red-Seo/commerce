@@ -1,88 +1,60 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import { Suspense } from 'react';
 
 import Cart from 'components/cart';
 import CartIcon from 'components/icons/cart';
+import LogoIcon from 'components/icons/logo';
 import { getMenu } from 'lib/shopify';
 import { Menu } from 'lib/shopify/types';
+import MobileMenu from './mobile-menu';
 import Search from './search';
 
 export default async function Navbar() {
   const menu = await getMenu('next-js-frontend-header-menu');
 
   return (
-    <header
-      aria-label="Site Header"
-      className="fixed left-0 right-0 top-0 z-50 flex h-32 w-full bg-cagette from-stop-start to-stop-end p-4 dark:bg-black lg:px-6"
-    >
-      <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="md:flex md:items-center md:gap-12">
-            <Link className="block text-teal-600" href="/">
-              <span className="sr-only">Home</span>
-              <img
-                src="https://www.cagettebkk.com/wp-content/uploads/2022/06/logo-main.png"
-                alt=""
-                className="h-24 "
-              />
-            </Link>
-          </div>
-
-          <div className="hidden md:block">
-            <nav aria-label="Site Nav">
-              {' '}
-              {menu.length ? (
-                <ul className="flex items-center gap-6 text-sm">
-                  {menu.map((item: Menu) => (
-                    <li key={item.title}>
-                      <Link
-                        href={item.path}
-                        className="rounded-lg px-2 py-1 text-2xl uppercase text-dark hover:text-gray-500 dark:text-gray-200 dark:hover:text-gray-400"
-                      >
-                        {item.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </nav>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="sm:flex sm:gap-4">
-              <Suspense fallback={<CartIcon className="h-6" />}>
-                <Search />
-              </Suspense>
-
-              <div className="hidden sm:flex">
-                <Suspense fallback={<CartIcon className="h-6" />}>
-                  {/* @ts-expect-error Server Component */}
-                  <Cart />
-                </Suspense>
-              </div>
-
-              <div className="block md:hidden">
-                <button className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+    <nav className="fixed left-0 right-0 top-0 z-10 flex w-full justify-around bg-cagette from-stop-start to-stop-end py-4 shadow-md backdrop-blur-md">
+      <div className="block w-1/3 md:hidden">
+        <MobileMenu menu={menu} />
       </div>
-    </header>
+      {/* Logo Container */}
+      <div className="flex items-center">
+        {/* Logo */}
+        <Link href="/" aria-label="Go back home">
+          <LogoIcon className="h-8 transition-transform hover:scale-110" />
+        </Link>
+      </div>
+
+      {/* Links Section */}
+      <div className="hidden items-center space-x-8 lg:flex">
+        {menu.length ? (
+          <ul>
+            {menu.map((item: Menu) => (
+              <li key={item.title}>
+                <Link
+                  href={item.path}
+                  className="flex cursor-pointer text-gray-600 transition-colors duration-300 hover:text-blue-500"
+                >
+                  {item.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
+
+      {/* Icon Menu Section */}
+      <div className="flex items-center space-x-5">
+        {/* Register */}
+        <Search />
+
+        {/* Login */}
+        <Suspense fallback={<CartIcon className="h-6" />}>
+          {/* @ts-expect-error Server Component */}
+          <Cart />
+        </Suspense>
+      </div>
+    </nav>
   );
 }
