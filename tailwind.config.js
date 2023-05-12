@@ -17,10 +17,19 @@ module.exports = {
       colors: {
         gray: colors.neutral,
         hotPink: '#FF1966',
-        dark: '#111111',
+        dark: '#222222',
         light: '#FAFAFA',
-        violetDark: '#4c2889'
+        violetDark: '#4c2889',
+        cagette: '#ded1c1',
       },
+      backgroundImage: {
+        'cagette': 'linear-gradient(180deg, var(--tw-gradient-stops))',
+      },
+      gradientColorStops: theme => ({
+        ...theme('colors'),
+        'stop-start': '#ded1c1',
+        'stop-end': '#ffffff',
+      }),
       keyframes: {
         fadeIn: {
           from: { opacity: 0 },
